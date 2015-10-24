@@ -20,7 +20,7 @@ class Clock(threading.Thread):
         self.start()
 
     def __del__(self):
-        self.__running = False
+        self.shutdown()
 
     def __executeEvents(self):
         if self.timedEventsIdx > -1:
@@ -31,6 +31,9 @@ class Clock(threading.Thread):
             if timeHash == currentHash:
                 self.timedEventsIdx = (self.timedEventsIdx + 1) % len(self.timedEvents)
                 if action: action()
+
+    def shutdown(self):
+        self.__running = False
 
     def run(self):
         while self.__running:

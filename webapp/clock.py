@@ -30,6 +30,7 @@ class Clock():
     def stop(self):
         logger.info("Terminating clock event loop")
         self.eventLoop.terminate()
+        self.eventLoop.kill()
 
     def start(self):
         logger.info("Starting clock event loop")

@@ -10,7 +10,7 @@
 
 import time
 from copy import copy
-from I2C import Adafruit_I2C
+from Adafruit_I2C import Adafruit_I2C
 
 # ============================================================================
 # LEDBackpack Class
@@ -23,6 +23,9 @@ class LEDBackpack:
   __HT16K33_REGISTER_DISPLAY_SETUP        = 0x80
   __HT16K33_REGISTER_SYSTEM_SETUP         = 0x20
   __HT16K33_REGISTER_DIMMING              = 0xE0
+
+  # Data base addresses
+  __HT16K33_ADDRESS_KEY_DATA              = 0x40
 
   # Blink rate
   __HT16K33_BLINKRATE_OFF                 = 0x00
@@ -90,6 +93,12 @@ class LEDBackpack:
       bytes.append(item & 0xFF)
       bytes.append((item >> 8) & 0xFF)
     self.i2c.writeList(0x00, bytes)
+
+  def getKeys(self, row):
+    "Returns a row of scanned key press values as a single 13-bit value (K13:K1)"
+    if (row > 2):
+      return
+    return self.i2c.readU16(self.__HT16K33_ADDRESS_KEY_DATA + row*2)
 
   def clear(self, update=True):
     "Clears the display memory"
